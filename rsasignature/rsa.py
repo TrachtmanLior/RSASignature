@@ -19,6 +19,16 @@ class RSA:
     
     def __init__(self, size=2048, primality_test="miller_rabin"):
         assert primality_test == "miller_rabin"
+        
+        # Validate key size according to FIPS 186-4
+        valid_sizes = [512, 1024, 2048, 3072, 4096, 7680, 15360]
+        if size not in valid_sizes:
+            raise ValueError(f"Invalid key size. Must be one of: {valid_sizes}. "
+                           f"Note: Sizes < 2048 are for testing only (NIST SP 800-131A)")
+        
+        if size < 2048:
+            print(f"Key size {size} bits is below NIST recommended minimum of 2048 bits, Use only for testing purposes.")
+        
         self.bit_size = size
         self.primality_test = miller_rabin
 
