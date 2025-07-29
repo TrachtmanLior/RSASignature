@@ -1,11 +1,15 @@
 import random
-
 def miller_rabin(n, k=40):
+    """
+    Perform the Miller-Rabin primality test on a given number.
 
-    # Implementation uses the Miller-Rabin Primality Test
-    # The optimal number of rounds for this test is 40
-    # See http://stackoverflow.com/questions/6325576/how-many-iterations-of-rabin-miller-should-i-use-for-cryptographic-safe-primes
-    # for justification
+    Args:
+        n (int): The number to be tested for primality.
+        k (int, optional): The number of accuracy rounds. Default is 40.
+
+    Returns:
+        bool: True if `n` is probably prime, False if it is composite.
+    """
 
     # If number is even, it's a composite number
     if n == 2 or n == 3:
@@ -13,16 +17,17 @@ def miller_rabin(n, k=40):
     if n < 2 or n % 2 == 0:
         return False
 
-    # Write n - 1 as (2^r) * s
-    r, s = 0, n - 1
-    while s % 2 == 0:
+    # Write (n - 1) as 2^r * d
+    r, d = 0, n - 1
+    while d % 2 == 0:
         r += 1
-        s //= 2
+        d //= 2
 
+    # Witness loop
     for _ in range(k):
         a = random.randrange(2, n - 1)
-        x = pow(a, s, n)
-        if x in (1, n - 1):
+        x = pow(a, d, n)
+        if x == 1 or x == n - 1:
             continue
         for _ in range(r - 1):
             x = pow(x, 2, n)
