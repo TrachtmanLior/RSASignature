@@ -21,20 +21,6 @@ def index():
                 "public": public_key,
             }
 
-        elif action == "encrypt" and rsa:
-            message = request.form.get("message")
-            cipher = RSA.encrypt(message, public_key)
-            output["encrypted"] = str(cipher)
-
-        elif action == "decrypt" and rsa:
-            ciphertext = request.form.get("ciphertext")
-            try:
-                decrypted = rsa.decrypt(int(ciphertext))
-                recovered = rsa.recover_string(decrypted).decode()
-                output["decrypted"] = recovered
-            except Exception as e:
-                output["decrypted_error"] = f"שגיאה: {str(e)}"
-
         elif action == "sign" and rsa:
             message = request.form.get("message")
             signature = rsa.sign(message)
@@ -46,7 +32,7 @@ def index():
                 verified = rsa.verify(sig, public_key)
                 output["verified"] = rsa.recover_string(verified).decode()
             except Exception as e:
-                output["verify_error"] = f"שגיאה: {str(e)}"
+                output["verify_error"] = f"error: {str(e)}"
 
     return render_template("index.html", output=output)
 

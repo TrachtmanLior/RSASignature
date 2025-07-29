@@ -33,16 +33,6 @@ class RSA:
     def recover_string(number):
         return number.to_bytes((number.bit_length() + 7) // 8, 'big')
 
-    @staticmethod
-    def encrypt(message, public_key):
-        e, n = public_key
-        m = RSA.process_string(message) if isinstance(message, str) else message
-        return exp(m, e, n)
-
-    def decrypt(self, ciphertext):
-        d, n = self.private_key
-        return exp(ciphertext, d, n)
-
     def sign(self, message):
         d, n = self.private_key
         m = RSA.process_string(message) if isinstance(message, str) else message
